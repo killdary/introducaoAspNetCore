@@ -7,10 +7,10 @@ namespace introducaoAspNetCore.Services
 {
     public interface IProdutoService
     {
-        List<Produto> GetAllProdutos();
+        Task<List<Produto>> GetAllProdutos();
 
-        Produto GetProdutoById(int id);
-        
-        List<Produto> AddProduto(Produto produto);
+        Task<Produto> GetProdutoById(int id);
+
+        Task<List<Produto>> AddProduto(Produto produto);
     }
 }

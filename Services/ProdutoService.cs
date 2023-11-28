@@ -2,48 +2,39 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using introducaoAspNetCore.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace introducaoAspNetCore.Services
 {
     public class ProdutoService : IProdutoService
     {
-        List<Produto> produtos = new List<Produto> {
 
-           new Produto
-            {
-                Id = 1,
-                Nome = "Teste 1",
-                Preco = 10
-            },
-           new Produto
-            {
-                Id = 2,
-                Nome = "Teste 2",
-                Preco = 20
-            },
-           new Produto
-            {
-                Id = 3,
-                Nome = "Teste 3",
-                Preco = 30
-            },
-        };
+        DatabaseContext _context;
 
-
-        public List<Produto> AddProduto(Produto produto)
+        public ProdutoService(DatabaseContext context)
         {
-            produtos.Add(produto);
-            return produtos;
+            _context = context;
         }
 
-        public List<Produto> GetAllProdutos()
+
+        public async Task<List<Produto>> AddProduto(Produto produto)
         {
-            return produtos;
+            _context.Produtos.Add(produto);
+            await _context.SaveChangesAsync();
+
+
+            return await _context.Produtos.ToListAsync();
         }
 
-        public Produto GetProdutoById(int id)
+        public async Task<List<Produto>> GetAllProdutos()
         {
-            return produtos.FirstOrDefault(p => p.Id == id);
+            return await _context.Produtos.ToListAsync();
+        }
+
+        public async Task<Produto> GetProdutoById(int id)
+        {
+            return await _context.Produtos.FindAsync(id);
         }
     }
 }
